@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // GitHub Pages SPA redirect — sends the path to index.html via sessionStorage
+      var path = window.location.pathname;
+      sessionStorage.setItem('redirect', path);
+      window.location.replace('/');
+    </script>
+  </head>
+  <body></body>
+</html>
