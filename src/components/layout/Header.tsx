@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Code2, BookOpen } from 'lucide-react'
+import { BookOpen } from 'lucide-react'
 import { ThemeToggle } from '../ui/ThemeToggle'
 
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
@@ -11,13 +11,8 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-brand-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-brand-500/30 transition-shadow">
-              <Code2 size={16} className="text-white" />
-            </div>
-            <span className="font-bold text-lg text-slate-900 dark:text-white">
-              Code<span className="text-brand-500">Sense</span>
-              <span className="ml-1 text-xs font-semibold bg-gradient-to-r from-brand-500 to-purple-500 bg-clip-text text-transparent">AI</span>
-            </span>
+            <img src="/codesense-dark-logo.png" alt="CodeSense AI" className="h-10 dark:hidden" />
+            <img src="/codesense-light-logo.png" alt="CodeSense AI" className="h-10 hidden dark:block" />
           </Link>
 
           {/* Nav */}
