@@ -240,8 +240,8 @@ export function BetaModeBanner() {
         {/* Footer */}
         <div className="mt-16 flex flex-col items-center gap-3">
           <div className="flex items-center gap-5 text-xs text-gray-400 dark:text-slate-600">
-            <a href="/privacy" className="hover:text-gray-600 dark:hover:text-slate-400 transition-colors">Privacy</a>
-            <a href="/terms" className="hover:text-gray-600 dark:hover:text-slate-400 transition-colors">Terms</a>
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 dark:hover:text-slate-400 transition-colors">Privacy</a>
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 dark:hover:text-slate-400 transition-colors">Terms</a>
             <a href="mailto:hello@codesense.online" className="hover:text-gray-600 dark:hover:text-slate-400 transition-colors">Contact</a>
           </div>
           <p className="text-xs text-gray-400 dark:text-slate-600">
