@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Header } from './components/layout/Header'
+import { BetaModeBanner } from './components/BetaModeBanner'
+
+// ─── Set to false to hide the beta banner and show the full site ──────────────
+const BETA_MODE = true
 import { HomePage } from './pages/HomePage'
 import { PricingPage } from './pages/PricingPage'
 import { DocsPage } from './pages/DocsPage'
@@ -19,7 +23,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-white dark:bg-[#0f1117]">
-        <Header />
+        {BETA_MODE ? <BetaModeBanner /> : <Header />}
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
