@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Copy, CheckCircle2, ExternalLink, ChevronRight, BookOpen, MessageCircle, X, Send, Bot, Loader2, Sparkles, GitPullRequest, Search, Building2, LayoutDashboard, User, Settings, Zap, Mail, GitBranch, Terminal, Key, Package } from 'lucide-react'
+import { Copy, CheckCircle2, ExternalLink, ChevronRight, BookOpen, MessageCircle, X, Send, Bot, Loader2, Sparkles, GitPullRequest, Search, Building2, LayoutDashboard, User, Settings, Zap, GitBranch, Package } from 'lucide-react'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
