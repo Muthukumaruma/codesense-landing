@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Copy, CheckCircle2, ExternalLink, ChevronRight, BookOpen, MessageCircle, X, Send, Bot, Loader2, Sparkles, GitPullRequest, Search, Building2, LayoutDashboard, User, Settings, Zap, GitBranch, Package } from 'lucide-react'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const API_BASE = import.meta.env.VITE_API_URL || 'https://api.codesense.online'
 
 // ─── AI Chat Widget ────────────────────────────────────────────────────────────
 interface ChatMsg { role: 'user' | 'assistant'; text: string }
@@ -668,9 +668,9 @@ export function DocsPage() {
                   <Package size={16} className="text-brand-500 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">npm package</p>
-                    <code className="text-xs text-slate-500 dark:text-slate-400">@codesenseai/codesense</code>
+                    <code className="text-xs text-slate-500 dark:text-slate-400">@codesenseai/cli</code>
                   </div>
-                  <ExtLink href="https://www.npmjs.com/package/@codesenseai/codesense">View on npm</ExtLink>
+                  <ExtLink href="https://www.npmjs.com/package/@codesenseai/cli">View on npm</ExtLink>
                 </div>
 
                 <MethodBlock label="Step 1 — Get an API Key" badge="Required">
@@ -688,7 +688,7 @@ export function DocsPage() {
 
 - name: Run CodeSense check
   run: |
-    npx @codesenseai/codesense@latest check \\
+    npx @codesenseai/cli@latest check \\
       --api-key \${{ secrets.CODESENSE_API_KEY }} \\
       --diff changes.diff \\
       --threshold 70`}</Code>

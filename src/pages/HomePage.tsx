@@ -504,7 +504,7 @@ export function HomePage() {
 
               {/* Terminal output */}
               <div className="bg-slate-950 p-5 font-mono text-xs leading-7 text-slate-300">
-                <div className="text-slate-500">$ npx @codesenseai/codesense@latest check \</div>
+                <div className="text-slate-500">$ npx @codesenseai/cli@latest check \</div>
                 <div className="text-slate-500 pl-4">--api-key $CODESENSE_API_KEY \</div>
                 <div className="text-slate-500 pl-4">--diff changes.diff --threshold 70</div>
                 <div className="mt-2 text-slate-400">  Submitting diff...</div>
