@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border: #e2e8f0;
+  }
+
+  .dark {
+    --bg-primary: #0f1117;
+    --bg-secondary: #161b27;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: #1e293b;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    @apply bg-white dark:bg-[#0f1117] text-slate-900 dark:text-slate-100 font-sans antialiased;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-600;
+  }
+}
+
+@layer components {
+  .fluid-container {
+    @apply w-full px-4 sm:px-6 lg:px-8;
+  }
+
+  .glass {
+    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/60;
+  }
+
+  .card {
+    @apply bg-white dark:bg-[#161b27] border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm;
+  }
+
+  .btn-primary {
+    @apply bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-brand-500/25 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold px-4 py-2 rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium px-3 py-2 rounded-lg transition-all duration-200;
+  }
+
+  .input {
+    @apply w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all;
+  }
+
+  .label {
+    @apply text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 block;
+  }
+
+  .severity-critical {
+    @apply bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 text-red-800 dark:text-red-300;
+  }
+
+  .severity-warning {
+    @apply bg-amber-50 dark:bg-amber-950/30 border-l-4 border-amber-500 text-amber-800 dark:text-amber-300;
+  }
+
+  .severity-info {
+    @apply bg-blue-50 dark:bg-blue-950/30 border-l-4 border-blue-500 text-blue-800 dark:text-blue-300;
+  }
+
+  .severity-success {
+    @apply bg-emerald-50 dark:bg-emerald-950/30 border-l-4 border-emerald-500 text-emerald-800 dark:text-emerald-300;
+  }
+}

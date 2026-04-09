@@ -1,0 +1,52 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Header } from './components/layout/Header'
+import { HomePage } from './pages/HomePage'
+import { PricingPage } from './pages/PricingPage'
+import { DocsPage } from './pages/DocsPage'
+import { PrivacyPage } from './pages/PrivacyPage'
+import { TermsPage } from './pages/TermsPage'
+import { RefundPage } from './pages/RefundPage'
+import { useThemeStore } from './store/themeStore'
+
+export default function App() {
+  const { theme } = useThemeStore()
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+  }, [theme])
+
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-white dark:bg-[#0f1117]">
+        <Header />
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/refund" element={<RefundPage />} />
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </main>
+        <footer className="border-t border-gray-100 dark:border-white/5 py-6">
+          <div className="fluid-container flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-slate-500">
+            <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3">
+              <span>© {new Date().getFullYear()} CodeSense AI. All rights reserved.</span>
+              <span className="hidden sm:inline text-gray-300 dark:text-slate-700">·</span>
+              <span>Built by <a href="https://muthukumar.win/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors underline underline-offset-2">Muthukumar</a></span>
+            </div>
+            <div className="flex items-center gap-6">
+              <a href="/pricing" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Pricing</a>
+              <a href="/refund" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Refund Policy</a>
+              <a href="/privacy" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Privacy</a>
+              <a href="/terms" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Terms</a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </BrowserRouter>
+  )
+}
