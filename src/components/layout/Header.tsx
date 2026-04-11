@@ -18,7 +18,7 @@ export function Header() {
 
           {/* Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            <Link to="/pricing" className="btn-ghost flex items-center gap-2 text-sm">Pricing</Link>
+            <a href={`${APP_URL}/pricing`} className="btn-ghost flex items-center gap-2 text-sm">Pricing</a>
             <Link to="/docs" className="btn-ghost flex items-center gap-2 text-sm">
               <BookOpen size={15} /> Docs
             </Link>

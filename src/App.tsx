@@ -4,7 +4,7 @@ import { Header } from './components/layout/Header'
 import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
-const BETA_MODE = false
+const BETA_MODE = true
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
 
 import { HomePage } from './pages/HomePage'
@@ -53,7 +53,7 @@ export default function App() {
               <span>Built by <a href="https://muthukumar.win/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors underline underline-offset-2">Muthukumar</a></span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="/pricing" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Pricing</a>
+              <a href={`${APP_URL}/pricing`} className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Pricing</a>
               <a href="/support" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Support</a>
               <a href="/refund" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Refund Policy</a>
               <a href="/security" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Security</a>
