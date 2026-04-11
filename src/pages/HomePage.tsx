@@ -150,9 +150,9 @@ export function HomePage() {
   const features = [
     { icon: Shield, title: 'Security Analysis', desc: 'Detect SQL injection, XSS, insecure dependencies, and 50+ vulnerability patterns.', color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-950/20' },
     { icon: Zap, title: 'Performance Tips', desc: 'Identify bottlenecks, memory leaks, and inefficient algorithms with fix suggestions.', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/20' },
-    { icon: Code2, title: 'Code Quality', desc: 'Enforce best practices, naming conventions, SOLID principles, and clean code patterns.', color: 'text-brand-500', bg: 'bg-brand-50 dark:bg-brand-950/20' },
+    { icon: Code2, title: 'Accessibility Checks', desc: 'Flag missing ARIA labels, alt text, keyboard traps, focus management, and contrast issues.', color: 'text-brand-500', bg: 'bg-brand-50 dark:bg-brand-950/20' },
     { icon: GitPullRequest, title: 'PR Integration', desc: 'Connect your repos and auto-review PRs before merge. Works with any workflow.', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/20' },
-    { icon: AlignLeft, title: 'Consistency Checks', desc: 'Catch mixed naming conventions, inconsistent patterns, and style drift across your codebase.', color: 'text-teal-500', bg: 'bg-teal-50 dark:bg-teal-950/20' },
+    { icon: AlignLeft, title: 'Best Practices', desc: 'Enforce SOLID principles, error handling, naming conventions, and clean code patterns with scored categories.', color: 'text-teal-500', bg: 'bg-teal-50 dark:bg-teal-950/20' },
     { icon: Repeat2, title: 'Reusability Hints', desc: 'Surface duplicated logic and missed opportunities to extract shared utilities or components.', color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-950/20' },
     { icon: GitBranch, title: 'CI/CD Quality Gate', desc: 'Block merges automatically when code quality drops. One npm command integrates with any pipeline.', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/20' },
   ]

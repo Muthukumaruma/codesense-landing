@@ -483,8 +483,9 @@ export function DocsPage() {
                   {[
                     { label: 'Quality Score', desc: '0–100 overall code quality rating' },
                     { label: 'Security Issues', desc: 'SQL injection, XSS, insecure patterns' },
-                    { label: 'Performance Tips', desc: 'Bottlenecks and memory issues' },
-                    { label: 'Best Practices', desc: 'SOLID principles, naming, clean code' },
+                    { label: 'Performance Tips', desc: 'Bottlenecks, memory leaks, and slow loops' },
+                    { label: 'Accessibility Checks', desc: 'Missing ARIA, alt text, keyboard & focus issues' },
+                    { label: 'Best Practices & Reusability', desc: 'SOLID principles, duplication, and clean code' },
                     { label: 'Line-level feedback', desc: 'Issues pinpointed to specific lines' },
                     { label: 'Fix suggestions', desc: 'How to fix each issue with examples' },
                   ].map((f) => (
@@ -535,6 +536,7 @@ export function DocsPage() {
                 <div className="grid sm:grid-cols-2 gap-2">
                   {[
                     { label: 'Overall Health Score', desc: 'Aggregate score across all reviewed files' },
+                    { label: 'Category Scores', desc: 'Security, Performance, Accessibility, Best Practices, Quality — each scored separately' },
                     { label: 'Per-file scores', desc: 'See which files need the most attention' },
                     { label: 'Issue breakdown', desc: 'Critical / Warnings / Info / Tips counts' },
                     { label: 'Export PDF & Excel', desc: 'Download the full report for sharing' },

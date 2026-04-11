@@ -4,7 +4,7 @@
  * TO REMOVE: delete the import and <BetaModeBanner /> line in App.tsx.
  */
 
-import { Shield, Zap, GitPullRequest, Terminal, Code2, Sparkles, Mail, CheckCircle2, ArrowRight, Star, Users, Clock } from 'lucide-react'
+import { Shield, Zap, GitPullRequest, Terminal, Code2, Sparkles, Mail, CheckCircle2, ArrowRight, Star, Users, Clock, AlignLeft, Repeat2 } from 'lucide-react'
 import { useState } from 'react'
 
 const features = [
@@ -35,6 +35,20 @@ const features = [
     bg: 'bg-emerald-500/10',
     title: 'CLI Quality Gate',
     desc: 'Block merges that fall below your quality threshold with a single CLI command.',
+  },
+  {
+    icon: AlignLeft,
+    color: 'text-teal-500',
+    bg: 'bg-teal-500/10',
+    title: 'Accessibility Checks',
+    desc: 'Flag missing ARIA labels, alt text, keyboard traps, focus issues, and contrast problems automatically.',
+  },
+  {
+    icon: Repeat2,
+    color: 'text-indigo-500',
+    bg: 'bg-indigo-500/10',
+    title: 'Reusability Hints',
+    desc: 'Surface duplicated logic and missed opportunities to extract shared utilities or components.',
   },
   {
     icon: Code2,

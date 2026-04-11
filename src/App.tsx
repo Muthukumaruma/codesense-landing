@@ -4,13 +4,15 @@ import { Header } from './components/layout/Header'
 import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
-const BETA_MODE = true
+const BETA_MODE = false
 import { HomePage } from './pages/HomePage'
 import { PricingPage } from './pages/PricingPage'
 import { DocsPage } from './pages/DocsPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
 import { RefundPage } from './pages/RefundPage'
+import { SupportPage } from './pages/SupportPage'
+import { SecurityPolicyPage } from './pages/SecurityPolicyPage'
 import { useThemeStore } from './store/themeStore'
 
 export default function App() {
@@ -32,6 +34,8 @@ export default function App() {
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/refund" element={<RefundPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/security" element={<SecurityPolicyPage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
@@ -44,7 +48,9 @@ export default function App() {
             </div>
             <div className="flex items-center gap-6">
               <a href="/pricing" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Pricing</a>
+              <a href="/support" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Support</a>
               <a href="/refund" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Refund Policy</a>
+              <a href="/security" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Security</a>
               <a href="/privacy" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Privacy</a>
               <a href="/terms" className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Terms</a>
             </div>
