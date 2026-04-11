@@ -5,8 +5,9 @@ import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
 const BETA_MODE = false
+const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+
 import { HomePage } from './pages/HomePage'
-import { PricingPage } from './pages/PricingPage'
 import { DocsPage } from './pages/DocsPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { TermsPage } from './pages/TermsPage'
@@ -14,6 +15,11 @@ import { RefundPage } from './pages/RefundPage'
 import { SupportPage } from './pages/SupportPage'
 import { SecurityPolicyPage } from './pages/SecurityPolicyPage'
 import { useThemeStore } from './store/themeStore'
+
+function RedirectToApp({ path }: { path: string }) {
+  window.location.replace(`${APP_URL}${path}`)
+  return null
+}
 
 export default function App() {
   const { theme } = useThemeStore()
@@ -29,7 +35,7 @@ export default function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/pricing" element={<RedirectToApp path="/pricing" />} />
             <Route path="/docs" element={<DocsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
