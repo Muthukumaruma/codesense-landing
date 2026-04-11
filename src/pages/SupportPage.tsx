@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Mail, BookOpen, MessageCircle, Clock, CheckCircle2, ChevronDown, ChevronUp, ExternalLink, Zap } from 'lucide-react'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.codesense.online'
-const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
 
 const faqs = [
   {

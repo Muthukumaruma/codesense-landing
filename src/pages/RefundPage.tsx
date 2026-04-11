@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Shield } from 'lucide-react'
 
-const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
 
 export function RefundPage() {
   return (

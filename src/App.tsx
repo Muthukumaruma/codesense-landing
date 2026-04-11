@@ -4,7 +4,7 @@ import { Header } from './components/layout/Header'
 import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
-const BETA_MODE = true
+const BETA_MODE = false
 import { HomePage } from './pages/HomePage'
 import { PricingPage } from './pages/PricingPage'
 import { DocsPage } from './pages/DocsPage'

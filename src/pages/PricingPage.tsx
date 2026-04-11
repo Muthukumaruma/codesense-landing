@@ -3,7 +3,8 @@ import { CheckCircle2, Zap, Shield, Users, ArrowRight, Sparkles, Loader2, Mail }
 import { Link } from 'react-router-dom'
 import { apiFetch } from '../services/api'
 
-const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
 
 const PLAN_META: Record<string, {
   color: string

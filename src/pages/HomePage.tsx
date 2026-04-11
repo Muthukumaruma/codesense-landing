@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import { Sparkles, Shield, Zap, GitPullRequest, Code2, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, AlignLeft, Repeat2, GitBranch, Terminal, XCircle } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
-const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
+const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
 
 const slides = [
   {
