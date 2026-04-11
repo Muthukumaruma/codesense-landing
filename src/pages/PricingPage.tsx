@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { CheckCircle2, Zap, Shield, Users, ArrowRight, Sparkles, Loader2, Mail } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { CheckCircle2, Zap, Shield, Users, ArrowRight, Sparkles, Mail } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { apiFetch } from '../services/api'
 
@@ -60,17 +60,13 @@ function buildPlans(dbPlans: DbPlan[]): MergedPlan[] {
 
 export function PricingPage() {
   const [yearly, setYearly] = useState(false)
+  // Start with static plans — renders instantly, no spinner
   const [plans, setPlans] = useState<MergedPlan[]>(STATIC_PLANS)
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 4000)
     apiFetch<DbPlan[]>('/config/plans')
       .then((dbPlans) => { if (dbPlans?.length) setPlans(buildPlans(dbPlans)) })
-      .catch(() => { /* use static fallback */ })
-      .finally(() => { clearTimeout(timeout); setLoading(false) })
-    return () => { clearTimeout(timeout); controller.abort() }
+      .catch(() => { /* static fallback stays */ })
   }, [])
 
   const yearlyDiscount = (monthly: number, yr: number) =>
@@ -115,12 +111,7 @@ export function PricingPage() {
 
       {/* Plans */}
       <section className="fluid-container pb-16">
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Loader2 size={28} className="animate-spin text-slate-400" />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {plans.map((plan) => {
               const isFree = plan.key === 'free'
               const isEnterprise = plan.key === 'enterprise'
@@ -199,7 +190,6 @@ export function PricingPage() {
               )
             })}
           </div>
-        )}
 
         <div className="text-center mt-10 text-sm text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-6">
           <span className="flex items-center gap-2"><Shield size={16} className="text-emerald-500" /> 7-day money-back guarantee</span>
