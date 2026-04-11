@@ -34,6 +34,21 @@ const FREE_PLAN: MergedPlan = {
   ...PLAN_META.free,
 }
 
+// Static fallback — shown immediately; overridden if API responds in time
+const STATIC_PLANS: MergedPlan[] = [
+  FREE_PLAN,
+  {
+    key: 'pro', name: 'Pro', monthlyPrice: 9, yearlyPrice: 86, reviewsLimit: 100,
+    features: ['100 code reviews / month', 'PR review (GitHub, GitLab, Azure, Bitbucket)', 'Repo scanner', 'PDF & Excel export', 'Email reports', 'Priority queue', 'Email support'],
+    ...PLAN_META.pro,
+  },
+  {
+    key: 'team', name: 'Team', monthlyPrice: 29, yearlyPrice: 278, reviewsLimit: 500,
+    features: ['500 reviews / month (shared)', 'Up to 10 team members', 'Everything in Pro', 'Team dashboard', 'Org-level analytics', 'Priority support'],
+    ...PLAN_META.team,
+  },
+]
+
 function buildPlans(dbPlans: DbPlan[]): MergedPlan[] {
   const paid = dbPlans.map((p) => {
     const key = p.name.toLowerCase()
@@ -45,14 +60,17 @@ function buildPlans(dbPlans: DbPlan[]): MergedPlan[] {
 
 export function PricingPage() {
   const [yearly, setYearly] = useState(false)
-  const [plans, setPlans] = useState<MergedPlan[]>([FREE_PLAN])
-  const [loading, setLoading] = useState(true)
+  const [plans, setPlans] = useState<MergedPlan[]>(STATIC_PLANS)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 4000)
     apiFetch<DbPlan[]>('/config/plans')
-      .then((dbPlans) => setPlans(buildPlans(dbPlans ?? [])))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+      .then((dbPlans) => { if (dbPlans?.length) setPlans(buildPlans(dbPlans)) })
+      .catch(() => { /* use static fallback */ })
+      .finally(() => { clearTimeout(timeout); setLoading(false) })
+    return () => { clearTimeout(timeout); controller.abort() }
   }, [])
 
   const yearlyDiscount = (monthly: number, yr: number) =>
