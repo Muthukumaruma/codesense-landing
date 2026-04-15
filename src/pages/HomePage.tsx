@@ -1,6 +1,91 @@
 import { Link } from 'react-router-dom'
-import { Sparkles, Shield, Zap, GitPullRequest, Code2, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, AlignLeft, Repeat2, GitBranch, Terminal, XCircle } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Sparkles, Shield, Zap, GitPullRequest, Code2, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, AlignLeft, Repeat2, GitBranch, Terminal, XCircle, FlaskConical, Lock, TrendingUp } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+
+// ─── Animated background ──────────────────────────────────────────────────────
+
+const CODE_TOKENS = [
+  'const', 'async', 'await', 'function', 'return', '=>', '{}', '[]',
+  'if (err)', 'try {', 'catch', '.map()', 'null', 'export', 'import',
+  'class', 'void', 'git push', 'npm run', 'AI ✓', '// fix', 'score: 98',
+  '<Review>', 'useState', 'Promise', 'throw', 'interface',
+]
+
+interface Particle {
+  id: number
+  token: string
+  x: number      // % from left
+  startY: number // % from top
+  duration: number // s
+  delay: number    // s
+  size: number     // rem
+  opacity: number
+}
+
+function useParticles(count: number): Particle[] {
+  const ref = useRef<Particle[]>([])
+  if (ref.current.length === 0) {
+    ref.current = Array.from({ length: count }, (_, i) => ({
+      id: i,
+      token: CODE_TOKENS[i % CODE_TOKENS.length],
+      x: Math.random() * 100,
+      startY: Math.random() * 100,
+      duration: 14 + Math.random() * 18,
+      delay: -(Math.random() * 20),
+      size: 0.65 + Math.random() * 0.45,
+      opacity: 0.07 + Math.random() * 0.13,
+    }))
+  }
+  return ref.current
+}
+
+function AnimatedBackground() {
+  const particles = useParticles(28)
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden>
+      {/* ── Gradient orbs ── */}
+      <div className="absolute top-[-10%] left-[-5%] w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full
+                      bg-brand-400/20 dark:bg-brand-500/12 blur-[80px]
+                      animate-orb-1" />
+      <div className="absolute bottom-[-15%] right-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full
+                      bg-purple-400/15 dark:bg-purple-500/10 blur-[90px]
+                      animate-orb-2" />
+      <div className="absolute top-[35%] right-[20%] w-[25vw] h-[25vw] max-w-[360px] max-h-[360px] rounded-full
+                      bg-teal-400/10 dark:bg-teal-500/8 blur-[70px]
+                      animate-orb-3 hidden sm:block" />
+
+      {/* ── Dot grid ── */}
+      <div className="absolute inset-0 opacity-[0.35] dark:opacity-[0.18]" style={{
+        backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)',
+        backgroundSize: '32px 32px',
+      }} />
+
+      {/* ── Scan beam ── */}
+      <div className="absolute inset-x-0 h-[2px] animate-scan
+                      bg-gradient-to-r from-transparent via-brand-400/50 dark:via-brand-400/30 to-transparent
+                      shadow-[0_0_12px_2px_rgba(99,102,241,0.25)]" />
+
+      {/* ── Floating code tokens ── */}
+      {particles.map((p) => (
+        <span
+          key={p.id}
+          className="absolute font-mono text-brand-600 dark:text-brand-400 whitespace-nowrap animate-float-up"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.startY}%`,
+            fontSize: `${p.size}rem`,
+            opacity: p.opacity,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+          }}
+        >
+          {p.token}
+        </span>
+      ))}
+    </div>
+  )
+}
 
 const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
 const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
@@ -144,6 +229,315 @@ const codeColors: Record<string, string> = {
   indigo: 'bg-indigo-50/60 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-300',
 }
 
+// ─── Features Carousel ───────────────────────────────────────────────────────
+
+const FEATURES = [
+  {
+    icon: Shield,
+    title: 'Security Analysis',
+    tag: 'Security',
+    color: 'text-red-500',
+    bg: 'bg-red-50 dark:bg-red-950/20',
+    accent: 'bg-red-500',
+    border: 'border-red-200 dark:border-red-800',
+    glow: 'shadow-red-500/20',
+    desc: 'Detect SQL injection, XSS, insecure dependencies, hardcoded secrets, and 50+ vulnerability patterns before they reach production.',
+    bullets: ['SQL injection & XSS detection', 'Hardcoded secrets scanner', 'Insecure auth patterns', 'Dependency vulnerability checks'],
+  },
+  {
+    icon: Zap,
+    title: 'Performance Bottlenecks',
+    tag: 'Performance',
+    color: 'text-amber-500',
+    bg: 'bg-amber-50 dark:bg-amber-950/20',
+    accent: 'bg-amber-500',
+    border: 'border-amber-200 dark:border-amber-800',
+    glow: 'shadow-amber-500/20',
+    desc: 'Identify N+1 queries, memory leaks, blocking I/O, inefficient loops, and unnecessary re-renders with concrete, ready-to-apply fix suggestions.',
+    bullets: ['N+1 query detection', 'Memory leak patterns', 'Blocking I/O analysis', 'Loop efficiency hints'],
+  },
+  {
+    icon: AlignLeft,
+    title: 'Accessibility Checks',
+    tag: 'A11y',
+    color: 'text-brand-500',
+    bg: 'bg-brand-50 dark:bg-brand-950/20',
+    accent: 'bg-brand-500',
+    border: 'border-brand-200 dark:border-brand-800',
+    glow: 'shadow-brand-500/20',
+    desc: 'Flag missing ARIA roles, alt text, keyboard traps, focus management issues, and contrast violations across your UI codebase.',
+    bullets: ['Missing ARIA labels', 'Alt text enforcement', 'Keyboard & focus traps', 'Colour contrast violations'],
+  },
+  {
+    icon: GitPullRequest,
+    title: 'PR Integration',
+    tag: 'PR Reviews',
+    color: 'text-purple-500',
+    bg: 'bg-purple-50 dark:bg-purple-950/20',
+    accent: 'bg-purple-500',
+    border: 'border-purple-200 dark:border-purple-800',
+    glow: 'shadow-purple-500/20',
+    desc: 'Connect GitHub, GitLab, Bitbucket, or Azure DevOps. Every pull request gets reviewed automatically — no manual trigger needed.',
+    bullets: ['GitHub, GitLab, Bitbucket, Azure', 'Auto-review on PR open', 'Score per diff file', 'Approve / Request Changes'],
+  },
+  {
+    icon: Code2,
+    title: 'Code Quality & Best Practices',
+    tag: 'Quality',
+    color: 'text-teal-500',
+    bg: 'bg-teal-50 dark:bg-teal-950/20',
+    accent: 'bg-teal-500',
+    border: 'border-teal-200 dark:border-teal-800',
+    glow: 'shadow-teal-500/20',
+    desc: 'Enforce SOLID principles, error handling, naming conventions, and clean architecture patterns with a scored breakdown per category.',
+    bullets: ['SOLID principle analysis', 'Error handling coverage', 'Naming consistency', 'Complexity scoring'],
+  },
+  {
+    icon: Repeat2,
+    title: 'Duplication & Reusability',
+    tag: 'DRY',
+    color: 'text-indigo-500',
+    bg: 'bg-indigo-50 dark:bg-indigo-950/20',
+    accent: 'bg-indigo-500',
+    border: 'border-indigo-200 dark:border-indigo-800',
+    glow: 'shadow-indigo-500/20',
+    desc: 'Surface copy-paste logic, duplicated constants, and missed opportunities to extract shared utilities or components across your codebase.',
+    bullets: ['Copy-paste detection', 'Duplicated constants', 'Missed abstractions', 'Shared utility hints'],
+  },
+  {
+    icon: GitBranch,
+    title: 'CI/CD Quality Gate',
+    tag: 'Pipeline',
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-50 dark:bg-emerald-950/20',
+    accent: 'bg-emerald-500',
+    border: 'border-emerald-200 dark:border-emerald-800',
+    glow: 'shadow-emerald-500/20',
+    desc: 'Block merges automatically when code quality drops. One npm command integrates with GitHub Actions, GitLab CI, or any CI pipeline.',
+    bullets: ['Auto-fail on threshold breach', 'AI + Semgrep combined', 'Per-key rate limits', 'Full run history dashboard'],
+  },
+  {
+    icon: TrendingUp,
+    title: 'Score Trends & Branch Compare',
+    tag: 'Analytics',
+    color: 'text-cyan-500',
+    bg: 'bg-cyan-50 dark:bg-cyan-950/20',
+    accent: 'bg-cyan-500',
+    border: 'border-cyan-200 dark:border-cyan-800',
+    glow: 'shadow-cyan-500/20',
+    desc: 'Track your code quality score over time, compare branches side-by-side, and spot regressions before they compound into bigger problems.',
+    bullets: ['Score over time chart', 'Branch diff analysis', 'Regression detection', 'Per-repo breakdowns'],
+  },
+  {
+    icon: FlaskConical,
+    title: 'Test Gap Detection',
+    tag: 'Testing',
+    color: 'text-rose-500',
+    bg: 'bg-rose-50 dark:bg-rose-950/20',
+    accent: 'bg-rose-500',
+    border: 'border-rose-200 dark:border-rose-800',
+    glow: 'shadow-rose-500/20',
+    desc: 'Identify untested branches, missing edge-case coverage, and logic paths that have no corresponding test — before QA finds them first.',
+    bullets: ['Untested branch detection', 'Edge-case gap analysis', 'Missing assertions hint', 'Experimental — improving fast'],
+  },
+]
+
+function FeaturesCarousel() {
+  const [current, setCurrent] = useState(0)
+  const [direction, setDirection] = useState<'next' | 'prev'>('next')
+  const [animating, setAnimating] = useState(false)
+  const [paused, setPaused] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const INTERVAL = 4000
+
+  const go = useCallback((idx: number, dir: 'next' | 'prev' = 'next') => {
+    if (animating) return
+    setDirection(dir)
+    setAnimating(true)
+    setProgress(0)
+    setTimeout(() => {
+      setCurrent(idx)
+      setAnimating(false)
+    }, 260)
+  }, [animating])
+
+  const next = useCallback(() => go((current + 1) % FEATURES.length, 'next'), [current, go])
+  const prev = useCallback(() => go((current - 1 + FEATURES.length) % FEATURES.length, 'prev'), [current, go])
+
+  // Touch swipe
+  const touchX = useRef<number | null>(null)
+
+  // Auto-advance + progress bar
+  useEffect(() => {
+    if (paused) { setProgress(0); return }
+    setProgress(0)
+    let elapsed = 0
+    const tick = 50
+    progressRef.current = setInterval(() => {
+      elapsed += tick
+      setProgress(Math.min((elapsed / INTERVAL) * 100, 100))
+      if (elapsed >= INTERVAL) next()
+    }, tick)
+    return () => { if (progressRef.current) clearInterval(progressRef.current) }
+  }, [current, paused, next])
+
+  const f = FEATURES[current]
+  const Icon = f.icon
+
+  return (
+    <section
+      className="py-12 md:py-20 overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="fluid-container">
+        {/* Header */}
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">
+            Everything you need to ship better code
+          </h2>
+          <p className="text-slate-500 max-w-xl mx-auto text-sm md:text-base">
+            Comprehensive code analysis powered by state-of-the-art AI models
+          </p>
+        </div>
+
+        {/* Dot nav */}
+        <div className="flex items-center justify-center gap-1.5 mb-6 flex-wrap px-4">
+          {FEATURES.map((feat, i) => (
+            <button
+              key={feat.tag}
+              onClick={() => go(i, i > current ? 'next' : 'prev')}
+              title={feat.tag}
+              className={`transition-all duration-300 rounded-full ${
+                i === current
+                  ? `w-8 h-2.5 ${f.accent}`
+                  : 'w-2.5 h-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Card */}
+        <div
+          className={`relative transition-all duration-[260ms] ${
+            animating
+              ? direction === 'next'
+                ? '-translate-x-4 opacity-0'
+                : 'translate-x-4 opacity-0'
+              : 'translate-x-0 opacity-100'
+          }`}
+          onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
+          onTouchEnd={(e) => {
+            if (touchX.current === null) return
+            const dx = touchX.current - e.changedTouches[0].clientX
+            if (Math.abs(dx) > 40) dx > 0 ? next() : prev()
+            touchX.current = null
+          }}
+        >
+          <div className={`card border-2 ${f.border} shadow-xl ${f.glow} overflow-hidden`}>
+            {/* Progress bar */}
+            <div className="h-0.5 bg-slate-100 dark:bg-slate-800">
+              <div
+                className={`h-full ${f.accent} transition-none`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+              {/* Left — info */}
+              <div className="p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-800">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-11 h-11 ${f.bg} rounded-xl flex items-center justify-center`}>
+                      <Icon size={22} className={f.color} />
+                    </div>
+                    <span className={`text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${f.bg} ${f.color}`}>
+                      {f.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 leading-snug">
+                    {f.title}
+                  </h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                    {f.desc}
+                  </p>
+                </div>
+                <ul className="space-y-2">
+                  {f.bullets.map((b) => (
+                    <li key={b} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-400">
+                      <CheckCircle2 size={14} className={`${f.color} shrink-0`} />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Right — feature index grid */}
+              <div className="p-6 md:p-8">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
+                  All {FEATURES.length} features
+                </p>
+                <div className="grid grid-cols-1 gap-2">
+                  {FEATURES.map((feat, i) => {
+                    const FIcon = feat.icon
+                    const isActive = i === current
+                    return (
+                      <button
+                        key={feat.tag}
+                        onClick={() => go(i, i > current ? 'next' : 'prev')}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 group w-full ${
+                          isActive
+                            ? `${feat.bg} border border-current ${feat.color}`
+                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-500'
+                        }`}
+                      >
+                        <FIcon
+                          size={15}
+                          className={`shrink-0 transition-colors ${isActive ? feat.color : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}
+                        />
+                        <span className={`text-sm font-medium truncate transition-colors ${isActive ? feat.color : ''}`}>
+                          {feat.title}
+                        </span>
+                        {isActive && (
+                          <span className={`ml-auto w-1.5 h-1.5 rounded-full ${feat.accent} shrink-0`} />
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer nav */}
+            <div className="px-6 md:px-8 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 flex items-center justify-between">
+              <span className="text-xs text-slate-400">
+                {current + 1} <span className="text-slate-300 dark:text-slate-600">/</span> {FEATURES.length}
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={prev}
+                  className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                  aria-label="Previous feature"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={next}
+                  className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                  aria-label="Next feature"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function HomePage() {
   const [active, setActive] = useState(0)
   const [animating, setAnimating] = useState(false)
@@ -179,17 +573,12 @@ export function HomePage() {
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'radial-gradient(circle, #6366f120 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-        }} />
-        <div className="absolute inset-0 bg-gradient-to-br from-white dark:from-[#0f1117] via-transparent to-purple-50/60 dark:to-purple-950/10 pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white dark:from-[#0f1117] to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-[#0f1117] to-transparent pointer-events-none" />
-        <div className="absolute top-24 right-32 w-80 h-80 bg-brand-400/15 dark:bg-brand-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-24 left-16 w-96 h-96 bg-purple-400/10 dark:bg-purple-500/8 rounded-full blur-3xl" />
+        <AnimatedBackground />
+        {/* top/bottom content fade */}
+        <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-white dark:from-[#0f1117] to-transparent pointer-events-none z-[1]" />
+        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-white dark:from-[#0f1117] to-transparent pointer-events-none z-[1]" />
 
-        <div className="relative fluid-container py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+        <div className="relative z-[2] fluid-container py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           <div className="text-left">
             <div className="inline-flex items-center gap-2 bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 rounded-full px-3 py-1.5 text-xs md:text-sm font-medium mb-6">
               <Sparkles size={13} />
@@ -277,26 +666,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ── Features grid ── */}
-      <section className="fluid-container py-12 md:py-16">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">Everything you need to ship better code</h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-sm md:text-base">Comprehensive code analysis powered by state-of-the-art AI models</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {features.map(({ icon: Icon, title, desc, color, bg }) => (
-            <div key={title} className="card p-5 md:p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 flex items-start gap-4 sm:block">
-              <div className={`w-10 h-10 md:w-12 md:h-12 ${bg} rounded-xl flex items-center justify-center flex-shrink-0 sm:mb-4`}>
-                <Icon size={20} className={color} />
-              </div>
-              <div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1 md:mb-2">{title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ── Features Carousel ── */}
+      <FeaturesCarousel />
 
       {/* ── Feature Showcase Slider ── */}
       <section className="bg-slate-50 dark:bg-[#0d1117] py-12 md:py-20">

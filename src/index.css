@@ -50,7 +50,7 @@
 
 @layer components {
   .fluid-container {
-    @apply w-full px-4 sm:px-6 lg:px-8;
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .glass {
@@ -95,5 +95,60 @@
 
   .severity-success {
     @apply bg-emerald-50 dark:bg-emerald-950/30 border-l-4 border-emerald-500 text-emerald-800 dark:text-emerald-300;
+  }
+}
+
+/* ── Hero background animations ──────────────────────────────────────────── */
+
+/* Floating code tokens drift upward and fade */
+@keyframes float-up {
+  0%   { transform: translateY(0)   rotate(0deg);   opacity: var(--tw-opacity, 0.1); }
+  50%  { opacity: calc(var(--tw-opacity, 0.1) * 1.6); }
+  100% { transform: translateY(-110vh) rotate(6deg); opacity: 0; }
+}
+.animate-float-up {
+  animation: float-up linear infinite;
+  will-change: transform, opacity;
+}
+
+/* Gradient orbs — slow drift + pulse */
+@keyframes orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1);       }
+  33%       { transform: translate(4%, 6%) scale(1.08);  }
+  66%       { transform: translate(-3%, 3%) scale(0.95); }
+}
+@keyframes orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1);        }
+  40%       { transform: translate(-5%, -4%) scale(1.1);  }
+  70%       { transform: translate(3%, -6%) scale(0.93);  }
+}
+@keyframes orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1);       }
+  50%       { transform: translate(6%, -5%) scale(1.12); }
+}
+.animate-orb-1 { animation: orb-1 22s ease-in-out infinite; will-change: transform; }
+.animate-orb-2 { animation: orb-2 28s ease-in-out infinite; will-change: transform; }
+.animate-orb-3 { animation: orb-3 18s ease-in-out infinite; will-change: transform; }
+
+/* Scanning beam — sweeps top to bottom */
+@keyframes scan {
+  0%   { top: -4px;    opacity: 0; }
+  5%   { opacity: 1;   }
+  95%  { opacity: 0.6; }
+  100% { top: 100%;    opacity: 0; }
+}
+.animate-scan {
+  animation: scan 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: top, opacity;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-up,
+  .animate-orb-1,
+  .animate-orb-2,
+  .animate-orb-3,
+  .animate-scan {
+    animation: none;
   }
 }
