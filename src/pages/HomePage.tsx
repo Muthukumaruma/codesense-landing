@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Sparkles, Shield, Zap, GitPullRequest, Code2, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, AlignLeft, Repeat2, GitBranch, Terminal, XCircle, FlaskConical, Lock, TrendingUp } from 'lucide-react'
+import { Sparkles, Shield, Zap, GitPullRequest, Code2, CheckCircle2, ArrowRight, ChevronLeft, ChevronRight, AlignLeft, Repeat2, GitBranch, Terminal, XCircle, FlaskConical, TrendingUp } from 'lucide-react'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 // ─── Animated background ──────────────────────────────────────────────────────
@@ -32,57 +32,144 @@ function useParticles(count: number): Particle[] {
       startY: Math.random() * 100,
       duration: 14 + Math.random() * 18,
       delay: -(Math.random() * 20),
-      size: 0.65 + Math.random() * 0.45,
-      opacity: 0.07 + Math.random() * 0.13,
+      size: 0.70 + Math.random() * 0.45,
+      opacity: 0.28 + Math.random() * 0.28,
     }))
   }
   return ref.current
 }
 
+// ─── Horizontal drifting code lines ─────────────────────────────────────────
+
+const H_CODE_SNIPPETS = [
+  { text: 'const result = await analyzeCode(input)',      color: 'text-brand-600 dark:text-brand-400' },
+  { text: 'if (score < threshold) process.exit(1)',       color: 'text-slate-500 dark:text-slate-500' },
+  { text: '// ⚠ SQL Injection detected — line 14',        color: 'text-red-500 dark:text-red-400' },
+  { text: 'return { score: 94, issues: [] }',             color: 'text-emerald-600 dark:text-emerald-400' },
+  { text: 'export function reviewPR(diff: Diff) {',       color: 'text-slate-500 dark:text-slate-500' },
+  { text: 'npx @codesenseai/cli check --threshold 70',    color: 'text-brand-600 dark:text-brand-400' },
+  { text: '✓ No critical issues found — Score: 97',       color: 'text-emerald-600 dark:text-emerald-400' },
+  { text: 'const { critical, high, medium } = findings',  color: 'text-slate-500 dark:text-slate-500' },
+  { text: '// TODO: sanitize user input before query',    color: 'text-amber-600 dark:text-amber-400' },
+  { text: 'await pr.addComment(reviewSummary)',            color: 'text-brand-600 dark:text-brand-400' },
+]
+
+interface DriftLine {
+  id: number; text: string; color: string
+  y: number; duration: number; delay: number
+  rtl: boolean; opacity: number; size: number
+}
+
+function useDriftLines(count: number): DriftLine[] {
+  const ref = useRef<DriftLine[]>([])
+  if (ref.current.length === 0) {
+    ref.current = Array.from({ length: count }, (_, i) => {
+      const s = H_CODE_SNIPPETS[i % H_CODE_SNIPPETS.length]
+      return {
+        id: i,
+        text: s.text,
+        color: s.color,
+        y: 5 + (i / count) * 88,
+        duration: 30 + Math.random() * 20,
+        delay: -(Math.random() * 40),
+        rtl: i % 3 === 0,
+        opacity: 0.30 + Math.random() * 0.20,
+        size: 0.72 + Math.random() * 0.28,
+      }
+    })
+  }
+  return ref.current
+}
+
+const CURSORS = [
+  { x: 11, y: 17, delay: 0   },
+  { x: 60, y: 40, delay: 0.5 },
+  { x: 34, y: 65, delay: 0.9 },
+  { x: 79, y: 27, delay: 0.3 },
+  { x: 48, y: 82, delay: 0.7 },
+]
+
+// ─── Animated background ──────────────────────────────────────────────────────
+
 function AnimatedBackground() {
-  const particles = useParticles(28)
+  const particles  = useParticles(28)
+  const driftLines = useDriftLines(10)
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden>
       {/* ── Gradient orbs ── */}
       <div className="absolute top-[-10%] left-[-5%] w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full
-                      bg-brand-400/20 dark:bg-brand-500/12 blur-[80px]
+                      bg-brand-400/45 dark:bg-brand-500/10 blur-[80px]
                       animate-orb-1" />
       <div className="absolute bottom-[-15%] right-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full
-                      bg-purple-400/15 dark:bg-purple-500/10 blur-[90px]
+                      bg-purple-400/35 dark:bg-purple-500/10 blur-[90px]
                       animate-orb-2" />
       <div className="absolute top-[35%] right-[20%] w-[25vw] h-[25vw] max-w-[360px] max-h-[360px] rounded-full
-                      bg-teal-400/10 dark:bg-teal-500/8 blur-[70px]
+                      bg-teal-400/30 dark:bg-teal-400/10 blur-[70px]
                       animate-orb-3 hidden sm:block" />
 
       {/* ── Dot grid ── */}
-      <div className="absolute inset-0 opacity-[0.35] dark:opacity-[0.18]" style={{
+      <div className="absolute inset-0 opacity-[0.55] dark:opacity-[0.18]" style={{
         backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)',
         backgroundSize: '32px 32px',
       }} />
 
-      {/* ── Scan beam ── */}
-      <div className="absolute inset-x-0 h-[2px] animate-scan
-                      bg-gradient-to-r from-transparent via-brand-400/50 dark:via-brand-400/30 to-transparent
-                      shadow-[0_0_12px_2px_rgba(99,102,241,0.25)]" />
+      {/* ── Scan beam — shadow handled via CSS class to avoid Tailwind arbitrary-value parse issues ── */}
+      <div className="absolute inset-x-0 h-[3px] dark:h-[2px] animate-scan scan-beam
+                      bg-gradient-to-r from-transparent via-brand-600/80 dark:via-brand-400/30 to-transparent" />
 
       {/* ── Floating code tokens ── */}
-      {particles.map((p) => (
-        <span
-          key={p.id}
-          className="absolute font-mono text-brand-600 dark:text-brand-400 whitespace-nowrap animate-float-up"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.startY}%`,
-            fontSize: `${p.size}rem`,
-            opacity: p.opacity,
-            animationDuration: `${p.duration}s`,
-            animationDelay: `${p.delay}s`,
-          }}
-        >
-          {p.token}
-        </span>
-      ))}
+      {/* wrapper dims tokens in dark mode so they don't overpower the dark bg */}
+      <div className="dark:opacity-60">
+        {particles.map((p) => (
+          <span
+            key={p.id}
+            className="absolute font-mono text-brand-600 dark:text-brand-400 whitespace-nowrap animate-float-up"
+            style={{
+              left: `${p.x}%`,
+              top: `${p.startY}%`,
+              fontSize: `${p.size}rem`,
+              opacity: p.opacity,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
+            }}
+          >
+            {p.token}
+          </span>
+        ))}
+      </div>
+
+      {/* ── Horizontal drifting code lines ── */}
+      <div className="dark:opacity-55">
+        {driftLines.map((l) => (
+          <span
+            key={l.id}
+            className={`absolute font-mono whitespace-nowrap ${l.color} ${l.rtl ? 'animate-drift-rtl' : 'animate-drift-ltr'}`}
+            style={{
+              top: `${l.y}%`,
+              opacity: l.opacity,
+              fontSize: `${l.size}rem`,
+              animationDuration: `${l.duration}s`,
+              animationDelay: `${l.delay}s`,
+            }}
+          >
+            {l.text}
+          </span>
+        ))}
+      </div>
+
+      {/* ── Blinking cursors ── */}
+      <div className="dark:opacity-50">
+        {CURSORS.map((c, i) => (
+          <span
+            key={i}
+            className="absolute font-mono text-brand-500 dark:text-brand-400 text-sm animate-blink select-none"
+            style={{ left: `${c.x}%`, top: `${c.y}%`, opacity: 0.35, animationDelay: `${c.delay}s` }}
+          >
+            ▌
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
@@ -412,7 +499,7 @@ function FeaturesCarousel() {
               className={`transition-all duration-300 rounded-full ${
                 i === current
                   ? `w-8 h-2.5 ${f.accent}`
-                  : 'w-2.5 h-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600'
+                  : 'w-2.5 h-2.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
               }`}
             />
           ))}
@@ -437,7 +524,7 @@ function FeaturesCarousel() {
         >
           <div className={`card border-2 ${f.border} shadow-xl ${f.glow} overflow-hidden`}>
             {/* Progress bar */}
-            <div className="h-0.5 bg-slate-100 dark:bg-slate-800">
+            <div className="h-0.5 bg-slate-300 dark:bg-slate-800">
               <div
                 className={`h-full ${f.accent} transition-none`}
                 style={{ width: `${progress}%` }}
@@ -538,19 +625,61 @@ function FeaturesCarousel() {
   )
 }
 
+// ─── Cycling headline ────────────────────────────────────────────────────────
+
+const HERO_PHRASES = [
+  { text: 'Automate PR Reviews',  gradient: false },
+  { text: 'Scan Entire Repos',    gradient: false },
+  { text: 'Block Bad Code',       gradient: false },
+  { text: 'All in One',           gradient: true  },
+]
+
+function CyclingHeadline() {
+  const [index,   setIndex]   = useState(0)
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setVisible(false)
+      setTimeout(() => {
+        setIndex(i => (i + 1) % HERO_PHRASES.length)
+        setVisible(true)
+      }, 300)
+    }, 2400)
+    return () => clearInterval(id)
+  }, [])
+
+  const phrase = HERO_PHRASES[index]
+  return (
+    <span
+      className={`inline-block transition-opacity duration-300 ease-in-out whitespace-nowrap ${
+        visible ? 'opacity-100' : 'opacity-0'
+      } ${
+        phrase.gradient
+          ? 'bg-gradient-to-r from-brand-500 to-purple-600 bg-clip-text text-transparent'
+          : ''
+      }`}
+    >
+      {phrase.text}
+    </span>
+  )
+}
+
+// ─── Home page ────────────────────────────────────────────────────────────────
+
 export function HomePage() {
   const [active, setActive] = useState(0)
   const [animating, setAnimating] = useState(false)
 
-  const features = [
-    { icon: Shield, title: 'Security Analysis', desc: 'Detect SQL injection, XSS, insecure dependencies, and 50+ vulnerability patterns.', color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-950/20' },
-    { icon: Zap, title: 'Performance Tips', desc: 'Identify bottlenecks, memory leaks, and inefficient algorithms with fix suggestions.', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/20' },
-    { icon: Code2, title: 'Accessibility Checks', desc: 'Flag missing ARIA labels, alt text, keyboard traps, focus management, and contrast issues.', color: 'text-brand-500', bg: 'bg-brand-50 dark:bg-brand-950/20' },
-    { icon: GitPullRequest, title: 'PR Integration', desc: 'Connect your repos and auto-review PRs before merge. Works with any workflow.', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/20' },
-    { icon: AlignLeft, title: 'Best Practices', desc: 'Enforce SOLID principles, error handling, naming conventions, and clean code patterns with scored categories.', color: 'text-teal-500', bg: 'bg-teal-50 dark:bg-teal-950/20' },
-    { icon: Repeat2, title: 'Reusability Hints', desc: 'Surface duplicated logic and missed opportunities to extract shared utilities or components.', color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-950/20' },
-    { icon: GitBranch, title: 'CI/CD Quality Gate', desc: 'Block merges automatically when code quality drops. One npm command integrates with any pipeline.', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/20' },
-  ]
+  // const features = [
+  //   { icon: Shield, title: 'Security Analysis', desc: 'Detect SQL injection, XSS, insecure dependencies, and 50+ vulnerability patterns.', color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-950/20' },
+  //   { icon: Zap, title: 'Performance Tips', desc: 'Identify bottlenecks, memory leaks, and inefficient algorithms with fix suggestions.', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/20' },
+  //   { icon: Code2, title: 'Accessibility Checks', desc: 'Flag missing ARIA labels, alt text, keyboard traps, focus management, and contrast issues.', color: 'text-brand-500', bg: 'bg-brand-50 dark:bg-brand-950/20' },
+  //   { icon: GitPullRequest, title: 'PR Integration', desc: 'Connect your repos and auto-review PRs before merge. Works with any workflow.', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/20' },
+  //   { icon: AlignLeft, title: 'Best Practices', desc: 'Enforce SOLID principles, error handling, naming conventions, and clean code patterns with scored categories.', color: 'text-teal-500', bg: 'bg-teal-50 dark:bg-teal-950/20' },
+  //   { icon: Repeat2, title: 'Reusability Hints', desc: 'Surface duplicated logic and missed opportunities to extract shared utilities or components.', color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-950/20' },
+  //   { icon: GitBranch, title: 'CI/CD Quality Gate', desc: 'Block merges automatically when code quality drops. One npm command integrates with any pipeline.', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/20' },
+  // ]
 
   const languages = ['JavaScript', 'TypeScript', 'Python', 'Java', 'Go', 'Rust', 'C#', 'PHP', 'Ruby', 'Swift']
 
@@ -584,11 +713,9 @@ export function HomePage() {
               <Sparkles size={13} />
               CodeSense AI — Smart Code Reviews
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5">
-              Code review like a{' '}
-              <span className="bg-gradient-to-r from-brand-500 to-purple-600 bg-clip-text text-transparent">
-                senior engineer
-              </span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5
+                           h-[1.25em] flex items-center overflow-hidden">
+              <CyclingHeadline />
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-8 leading-relaxed">
               Instant AI-powered code analysis that catches security vulnerabilities, performance issues, and code quality problems in seconds.
@@ -602,6 +729,12 @@ export function HomePage() {
                 See how it works
               </Link>
             </div>
+            {/* Privacy trust line */}
+            <div className="flex items-center gap-2 mb-6 text-xs text-slate-400 dark:text-slate-500">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500 shrink-0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Your code is <strong className="text-slate-600 dark:text-slate-400 font-semibold">never stored or shared</strong> — processed in memory and discarded immediately after review.</span>
+            </div>
+
             <div className="flex flex-wrap gap-1.5">
               {languages.map((lang) => (
                 <span key={lang} className="text-xs bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 px-2.5 py-1 rounded-full font-medium border border-slate-200 dark:border-slate-700">
@@ -728,7 +861,7 @@ export function HomePage() {
               })}
               <div className="flex items-center gap-2 px-4 pt-2">
                 {slides.map((_, i) => (
-                  <button key={i} onClick={() => goTo(i)} className={`h-1 rounded-full transition-all duration-300 ${i === active ? 'w-6 bg-brand-500' : 'w-2 bg-slate-300 dark:bg-slate-700'}`} />
+                  <button key={i} onClick={() => goTo(i)} className={`h-1 rounded-full transition-all duration-300 ${i === active ? 'w-6 bg-brand-500' : 'w-2 bg-slate-400 dark:bg-slate-700'}`} />
                 ))}
               </div>
             </div>

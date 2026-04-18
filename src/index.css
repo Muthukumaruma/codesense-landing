@@ -142,13 +142,43 @@
   will-change: top, opacity;
 }
 
+/* Scan beam — per-theme glow (avoids Tailwind arbitrary rgba parse issues) */
+.scan-beam {
+  box-shadow: 0 0 20px 6px rgba(99, 102, 241, 0.45);
+}
+.dark .scan-beam {
+  box-shadow: 0 0 12px 2px rgba(99, 102, 241, 0.25);
+}
+
+/* Horizontal drifting code lines */
+@keyframes drift-ltr {
+  0%   { transform: translateX(-110%); }
+  100% { transform: translateX(110vw); }
+}
+@keyframes drift-rtl {
+  0%   { transform: translateX(110vw); }
+  100% { transform: translateX(-110%); }
+}
+.animate-drift-ltr { animation: drift-ltr linear infinite; will-change: transform; }
+.animate-drift-rtl { animation: drift-rtl linear infinite; will-change: transform; }
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.animate-blink { animation: blink 1.1s step-end infinite; }
+
 /* Respect reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
   .animate-float-up,
   .animate-orb-1,
   .animate-orb-2,
   .animate-orb-3,
-  .animate-scan {
+  .animate-scan,
+  .animate-drift-ltr,
+  .animate-drift-rtl,
+  .animate-blink {
     animation: none;
   }
 }

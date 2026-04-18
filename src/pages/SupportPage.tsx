@@ -6,10 +6,10 @@ const _rawAppUrl = import.meta.env.VITE_APP_URL || 'https://app.codesense.online
 const APP_URL = _rawAppUrl.startsWith('http') ? _rawAppUrl : `http://${_rawAppUrl}`
 
 const faqs = [
-  {
-    q: 'Why is my review failing or returning no results?',
-    a: 'Most review failures are caused by an API key issue. Check that your OpenAI or Anthropic key is valid and has sufficient credits. If you are on the free plan, you may have reached your monthly review limit — check your Dashboard usage counter.',
-  },
+  // {
+  //   q: 'Why is my review failing or returning no results?',
+  //   a: 'Most review failures are caused by an API key issue. Check that your OpenAI or Anthropic key is valid and has sufficient credits. If you are on the free plan, you may have reached your monthly review limit — check your Dashboard usage counter.',
+  // },
   {
     q: 'How do I connect GitHub / GitLab / Azure DevOps / Bitbucket?',
     a: 'Go to PR Reviews in the navigation, then click the platform card you want to connect. You will be redirected to that platform\'s OAuth flow. Once authorized, your repos and open PRs will appear automatically.',

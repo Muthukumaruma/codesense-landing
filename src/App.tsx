@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { Header } from './components/layout/Header'
 import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
-const BETA_MODE = true
+const BETA_MODE = false
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
 
 import { HomePage } from './pages/HomePage'
@@ -36,7 +36,8 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/pricing" element={<RedirectToApp path="/pricing" />} />
-            <Route path="/docs" element={<DocsPage />} />
+            <Route path="/docs" element={<Navigate to="/docs/getting-started" replace />} />
+            <Route path="/docs/:section" element={<DocsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/refund" element={<RefundPage />} />
