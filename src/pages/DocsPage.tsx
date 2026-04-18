@@ -3,7 +3,7 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import {
   Copy, CheckCircle2, ExternalLink, ChevronRight, ChevronLeft, BookOpen, MessageCircle, X, Send,
   Bot, Loader2, Sparkles, GitPullRequest, Search, Building2, LayoutDashboard, User, Settings, Zap,
-  GitBranch, Package, Bell, Clock, BarChart2, CreditCard, History, Terminal, Webhook, Slack
+  GitBranch, Package, Bell, Clock, BarChart2, CreditCard, History, Terminal, Slack
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -164,14 +164,6 @@ function Tip({ children, type = 'info' }: { children: React.ReactNode; type?: 'i
   return <div className={`border rounded-xl px-4 py-3 text-xs leading-relaxed ${styles[type]}`}>{children}</div>
 }
 
-function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }) {
-  return (
-    <div className="border-l-4 border-brand-500 pl-4 mb-5 flex items-center gap-3">
-      <div className="w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-950/30 flex items-center justify-center text-brand-500 flex-shrink-0">{icon}</div>
-      <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
-    </div>
-  )
-}
 
 function PlatformHeader({ color, icon, name }: { color: string; icon: React.ReactNode; name: string }) {
   return (
