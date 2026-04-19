@@ -432,10 +432,10 @@ const FEATURES = [
 // ─── Cycling headline ────────────────────────────────────────────────────────
 
 const HERO_PHRASES = [
-  { text: 'Find Bugs Instantly',       gradient: false },
-  { text: 'Automate PR Reviews',       gradient: false },
-  { text: 'Improve Code with AI',      gradient: false },
-  { text: 'Ship Better Code, Faster',  gradient: true  },
+  { text: 'Ship Better Code, Faster',                gradient: 'from-brand-500 to-purple-600'   },
+  { text: 'Catch Bugs Before They Reach Production', gradient: 'from-rose-500 to-orange-500'    },
+  { text: 'Automate PR Reviews with AI',             gradient: 'from-emerald-400 to-cyan-500'   },
+  { text: 'Enforce Quality Gates in CI/CD',          gradient: 'from-amber-400 to-orange-500'   },
 ]
 
 function CyclingHeadline() {
@@ -456,12 +456,8 @@ function CyclingHeadline() {
   const phrase = HERO_PHRASES[index]
   return (
     <span
-      className={`inline-block transition-opacity duration-300 ease-in-out ${
+      className={`inline-block transition-opacity duration-300 ease-in-out bg-gradient-to-r ${phrase.gradient} bg-clip-text text-transparent ${
         visible ? 'opacity-100' : 'opacity-0'
-      } ${
-        phrase.gradient
-          ? 'bg-gradient-to-r from-brand-500 to-purple-600 bg-clip-text text-transparent'
-          : ''
       }`}
     >
       {phrase.text}
@@ -642,7 +638,7 @@ export function HomePage() {
               <Sparkles size={13} />
               AI Code Review for Repositories &amp; CI Pipelines
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5 min-h-[1.25em]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5 h-[2.6em] flex items-start overflow-hidden">
               <CyclingHeadline />
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-3 leading-relaxed">
