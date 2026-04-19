@@ -429,209 +429,13 @@ const FEATURES = [
   },
 ]
 
-function FeaturesCarousel() {
-  const [current, setCurrent] = useState(0)
-  const [direction, setDirection] = useState<'next' | 'prev'>('next')
-  const [animating, setAnimating] = useState(false)
-  const [paused, setPaused] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const progressRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const INTERVAL = 4000
-
-  const go = useCallback((idx: number, dir: 'next' | 'prev' = 'next') => {
-    if (animating) return
-    setDirection(dir)
-    setAnimating(true)
-    setProgress(0)
-    setTimeout(() => {
-      setCurrent(idx)
-      setAnimating(false)
-    }, 260)
-  }, [animating])
-
-  const next = useCallback(() => go((current + 1) % FEATURES.length, 'next'), [current, go])
-  const prev = useCallback(() => go((current - 1 + FEATURES.length) % FEATURES.length, 'prev'), [current, go])
-
-  // Touch swipe
-  const touchX = useRef<number | null>(null)
-
-  // Auto-advance + progress bar
-  useEffect(() => {
-    if (paused) { setProgress(0); return }
-    setProgress(0)
-    let elapsed = 0
-    const tick = 50
-    progressRef.current = setInterval(() => {
-      elapsed += tick
-      setProgress(Math.min((elapsed / INTERVAL) * 100, 100))
-      if (elapsed >= INTERVAL) next()
-    }, tick)
-    return () => { if (progressRef.current) clearInterval(progressRef.current) }
-  }, [current, paused, next])
-
-  const f = FEATURES[current]
-  const Icon = f.icon
-
-  return (
-    <section
-      className="py-12 md:py-20 overflow-hidden"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div className="fluid-container">
-        {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3">
-            Everything you need to ship better code
-          </h2>
-          <p className="text-slate-500 max-w-xl mx-auto text-sm md:text-base">
-            Comprehensive code analysis powered by state-of-the-art AI models
-          </p>
-        </div>
-
-        {/* Dot nav */}
-        <div className="flex items-center justify-center gap-1.5 mb-6 flex-wrap px-4">
-          {FEATURES.map((feat, i) => (
-            <button
-              key={feat.tag}
-              onClick={() => go(i, i > current ? 'next' : 'prev')}
-              title={feat.tag}
-              className={`transition-all duration-300 rounded-full ${
-                i === current
-                  ? `w-8 h-2.5 ${f.accent}`
-                  : 'w-2.5 h-2.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600'
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Card */}
-        <div
-          className={`relative transition-all duration-[260ms] ${
-            animating
-              ? direction === 'next'
-                ? '-translate-x-4 opacity-0'
-                : 'translate-x-4 opacity-0'
-              : 'translate-x-0 opacity-100'
-          }`}
-          onTouchStart={(e) => { touchX.current = e.touches[0].clientX }}
-          onTouchEnd={(e) => {
-            if (touchX.current === null) return
-            const dx = touchX.current - e.changedTouches[0].clientX
-            if (Math.abs(dx) > 40) dx > 0 ? next() : prev()
-            touchX.current = null
-          }}
-        >
-          <div className={`card border-2 ${f.border} shadow-xl ${f.glow} overflow-hidden`}>
-            {/* Progress bar */}
-            <div className="h-0.5 bg-slate-300 dark:bg-slate-800">
-              <div
-                className={`h-full ${f.accent} transition-none`}
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-              {/* Left — info */}
-              <div className="p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-800">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`w-11 h-11 ${f.bg} rounded-xl flex items-center justify-center`}>
-                      <Icon size={22} className={f.color} />
-                    </div>
-                    <span className={`text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${f.bg} ${f.color}`}>
-                      {f.tag}
-                    </span>
-                  </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-3 leading-snug">
-                    {f.title}
-                  </h3>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
-                    {f.desc}
-                  </p>
-                </div>
-                <ul className="space-y-2">
-                  {f.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-400">
-                      <CheckCircle2 size={14} className={`${f.color} shrink-0`} />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Right — feature index grid */}
-              <div className="p-6 md:p-8">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
-                  All {FEATURES.length} features
-                </p>
-                <div className="grid grid-cols-1 gap-2">
-                  {FEATURES.map((feat, i) => {
-                    const FIcon = feat.icon
-                    const isActive = i === current
-                    return (
-                      <button
-                        key={feat.tag}
-                        onClick={() => go(i, i > current ? 'next' : 'prev')}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 group w-full ${
-                          isActive
-                            ? `${feat.bg} border border-current ${feat.color}`
-                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-500'
-                        }`}
-                      >
-                        <FIcon
-                          size={15}
-                          className={`shrink-0 transition-colors ${isActive ? feat.color : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}
-                        />
-                        <span className={`text-sm font-medium truncate transition-colors ${isActive ? feat.color : ''}`}>
-                          {feat.title}
-                        </span>
-                        {isActive && (
-                          <span className={`ml-auto w-1.5 h-1.5 rounded-full ${feat.accent} shrink-0`} />
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Footer nav */}
-            <div className="px-6 md:px-8 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 flex items-center justify-between">
-              <span className="text-xs text-slate-400">
-                {current + 1} <span className="text-slate-300 dark:text-slate-600">/</span> {FEATURES.length}
-              </span>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={prev}
-                  className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                  aria-label="Previous feature"
-                >
-                  <ChevronLeft size={16} />
-                </button>
-                <button
-                  onClick={next}
-                  className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-                  aria-label="Next feature"
-                >
-                  <ChevronRight size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ─── Cycling headline ────────────────────────────────────────────────────────
 
 const HERO_PHRASES = [
-  { text: 'Automate PR Reviews',  gradient: false },
-  { text: 'Scan Entire Repos',    gradient: false },
-  { text: 'Block Bad Code',       gradient: false },
-  { text: 'All in One',           gradient: true  },
+  { text: 'Find Bugs Instantly',       gradient: false },
+  { text: 'Automate PR Reviews',       gradient: false },
+  { text: 'Improve Code with AI',      gradient: false },
+  { text: 'Ship Better Code, Faster',  gradient: true  },
 ]
 
 function CyclingHeadline() {
@@ -652,7 +456,7 @@ function CyclingHeadline() {
   const phrase = HERO_PHRASES[index]
   return (
     <span
-      className={`inline-block transition-opacity duration-300 ease-in-out whitespace-nowrap ${
+      className={`inline-block transition-opacity duration-300 ease-in-out ${
         visible ? 'opacity-100' : 'opacity-0'
       } ${
         phrase.gradient
@@ -662,6 +466,131 @@ function CyclingHeadline() {
     >
       {phrase.text}
     </span>
+  )
+}
+
+// ─── Hero Features Carousel ──────────────────────────────────────────────────
+
+function HeroFeaturesCarousel() {
+  const [current, setCurrent] = useState(0)
+  const [visible, setVisible] = useState(true)
+  const [progress, setProgress] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const INTERVAL = 3500
+
+  const go = useCallback((idx: number) => {
+    setVisible(false)
+    setProgress(0)
+    setTimeout(() => { setCurrent(idx); setVisible(true) }, 220)
+  }, [])
+
+  const next = useCallback(() => go((current + 1) % FEATURES.length), [current, go])
+  const prev = useCallback(() => go((current - 1 + FEATURES.length) % FEATURES.length), [current, go])
+
+  useEffect(() => {
+    if (paused) { setProgress(0); return }
+    setProgress(0)
+    let elapsed = 0
+    const tick = 50
+    const id = setInterval(() => {
+      elapsed += tick
+      setProgress(Math.min((elapsed / INTERVAL) * 100, 100))
+      if (elapsed >= INTERVAL) next()
+    }, tick)
+    return () => clearInterval(id)
+  }, [current, paused, next])
+
+  const f = FEATURES[current]
+  const Icon = f.icon
+
+  const gradients: Record<string, string> = {
+    'text-red-500':    'from-red-500/20 via-red-400/10 to-transparent',
+    'text-amber-500':  'from-amber-500/20 via-amber-400/10 to-transparent',
+    'text-brand-500':  'from-brand-500/20 via-brand-400/10 to-transparent',
+    'text-purple-500': 'from-purple-500/20 via-purple-400/10 to-transparent',
+    'text-teal-500':   'from-teal-500/20 via-teal-400/10 to-transparent',
+    'text-indigo-500': 'from-indigo-500/20 via-indigo-400/10 to-transparent',
+    'text-emerald-500':'from-emerald-500/20 via-emerald-400/10 to-transparent',
+    'text-cyan-500':   'from-cyan-500/20 via-cyan-400/10 to-transparent',
+    'text-rose-500':   'from-rose-500/20 via-rose-400/10 to-transparent',
+  }
+  const grad = gradients[f.color] || 'from-brand-500/20 via-brand-400/10 to-transparent'
+
+  return (
+    <div
+      className="relative h-full"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Glow blob */}
+      <div className={`absolute -inset-4 bg-gradient-radial ${grad} blur-2xl pointer-events-none z-0`} />
+
+      <div className={`relative z-10 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#161b22] shadow-2xl overflow-hidden transition-all duration-220 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+
+        {/* Progress bar */}
+        <div className="h-0.5 bg-slate-100 dark:bg-slate-800">
+          <div className={`h-full ${f.accent} transition-none`} style={{ width: `${progress}%` }} />
+        </div>
+
+        {/* Gradient header */}
+        <div className={`bg-gradient-to-br ${grad} border-b border-slate-100 dark:border-white/5 px-5 py-5`}>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className={`w-10 h-10 ${f.bg} rounded-xl flex items-center justify-center shadow-sm`}>
+                <Icon size={20} className={f.color} />
+              </div>
+              <span className={`text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded-full ${f.bg} ${f.color}`}>
+                {f.tag}
+              </span>
+            </div>
+            <span className="text-xs text-slate-400 dark:text-slate-600 font-mono">{current + 1}/{FEATURES.length}</span>
+          </div>
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-snug">{f.title}</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">{f.desc}</p>
+        </div>
+
+        {/* Bullet points */}
+        <div className="px-5 py-4 space-y-2.5">
+          {f.bullets.map((b) => (
+            <div key={b} className="flex items-center gap-2.5">
+              <div className={`w-5 h-5 rounded-full ${f.bg} flex items-center justify-center flex-shrink-0`}>
+                <CheckCircle2 size={12} className={f.color} />
+              </div>
+              <span className="text-sm text-slate-600 dark:text-slate-300">{b}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Dot nav + arrows */}
+        <div className="px-5 py-3 border-t border-slate-100 dark:border-white/5 bg-slate-50/60 dark:bg-slate-900/40 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1 flex-wrap flex-1">
+            {FEATURES.map((feat, i) => (
+              <button
+                key={feat.tag}
+                onClick={() => go(i)}
+                title={feat.tag}
+                className={`transition-all duration-300 rounded-full ${
+                  i === current ? `w-5 h-1.5 ${f.accent}` : 'w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 hover:bg-slate-400'
+                }`}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            <button onClick={prev} className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+              <ChevronLeft size={14} />
+            </button>
+            <button onClick={next} className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating badge */}
+      <div className={`absolute -top-3 -right-3 ${f.accent} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-20 flex items-center gap-1.5`}>
+        <Icon size={11} /> {f.tag}
+      </div>
+    </div>
   )
 }
 
@@ -711,14 +640,17 @@ export function HomePage() {
           <div className="text-left">
             <div className="inline-flex items-center gap-2 bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 rounded-full px-3 py-1.5 text-xs md:text-sm font-medium mb-6">
               <Sparkles size={13} />
-              CodeSense AI — Smart Code Reviews
+              AI Code Review for Repositories &amp; CI Pipelines
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5
-                           h-[1.25em] flex items-center overflow-hidden">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-5 min-h-[1.25em]">
               <CyclingHeadline />
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-8 leading-relaxed">
-              Instant AI-powered code analysis that catches security vulnerabilities, performance issues, and code quality problems in seconds.
+            <p className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-slate-400 max-w-xl mb-3 leading-relaxed">
+              AI Code Review in Seconds — catch security vulnerabilities, performance issues, and code quality problems before they reach production.
+            </p>
+            <p className="text-sm text-slate-400 dark:text-slate-500 max-w-xl mb-8 flex items-center gap-2">
+              <Terminal size={14} className="text-brand-400 shrink-0" />
+              Connect your repo or run CodeSense in your CI using our CLI.
             </p>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8">
               <a href={`${APP_URL}/signup`} className="btn-primary text-base px-6 py-3 flex items-center justify-center gap-2 shadow-xl shadow-brand-500/25">
@@ -744,63 +676,12 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Right — mock code card, desktop only */}
+          {/* Right — animated features carousel */}
           <div className="hidden lg:block relative">
-            <div className="relative rounded-2xl border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#161b22]/90 backdrop-blur-sm shadow-2xl shadow-slate-900/10 dark:shadow-black/40 overflow-hidden">
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-[#0d1117]">
-                <span className="w-3 h-3 rounded-full bg-red-400" />
-                <span className="w-3 h-3 rounded-full bg-amber-400" />
-                <span className="w-3 h-3 rounded-full bg-green-400" />
-                <span className="ml-3 text-xs text-slate-400 font-mono">auth.js — AI Review</span>
-              </div>
-              <div className="p-4 font-mono text-xs leading-6 text-slate-700 dark:text-slate-300 space-y-0.5">
-                <div><span className="text-purple-500">function</span> <span className="text-brand-500">login</span>(<span className="text-amber-500">user</span>, <span className="text-amber-500">pass</span>) {'{'}</div>
-                <div className="pl-4 flex items-start gap-2">
-                  <span className="shrink-0 text-red-400 mt-0.5">▶</span>
-                  <span><span className="text-slate-400">const</span> query = <span className="text-green-500">`SELECT * WHERE user='<span className="text-red-400">${'$'}{'{'}user{'}'}</span>'`</span></span>
-                </div>
-                <div className="pl-4"><span className="text-slate-400">return</span> db.run(query)</div>
-                <div>{'}'}</div>
-              </div>
-              <div className="border-t border-slate-100 dark:border-white/5 divide-y divide-slate-100 dark:divide-white/5">
-                <div className="flex items-start gap-3 px-4 py-3 bg-red-50/50 dark:bg-red-950/20">
-                  <span className="mt-0.5 w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center shrink-0">
-                    <Shield size={11} className="text-red-500" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-semibold text-red-600 dark:text-red-400">SQL Injection — Critical</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">User input directly interpolated into SQL query. Use parameterized queries.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 px-4 py-3 bg-amber-50/50 dark:bg-amber-950/20">
-                  <span className="mt-0.5 w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0">
-                    <Zap size={11} className="text-amber-500" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-semibold text-amber-600 dark:text-amber-400">Missing input validation</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Validate and sanitize inputs before use.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 px-4 py-3 bg-brand-50/30 dark:bg-brand-950/10">
-                  <span className="mt-0.5 w-5 h-5 rounded-full bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={11} className="text-brand-500" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-semibold text-brand-600 dark:text-brand-400">Suggested fix ready</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AI-generated secure replacement with prepared statements.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="absolute -top-4 -right-4 bg-gradient-to-br from-brand-500 to-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-              3 issues found
-            </div>
+            <HeroFeaturesCarousel />
           </div>
         </div>
       </section>
-
-      {/* ── Features Carousel ── */}
-      <FeaturesCarousel />
 
       {/* ── Feature Showcase Slider ── */}
       <section className="bg-slate-50 dark:bg-[#0d1117] py-12 md:py-20">

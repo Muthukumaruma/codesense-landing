@@ -42,7 +42,7 @@ const faqs = [
 
 export function SupportPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [supportEmail, setSupportEmail] = useState('hello@codesense.online')
+  const [supportEmail, setSupportEmail] = useState('support@codesense.online')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
@@ -91,7 +91,7 @@ export function SupportPage() {
             How can we help?
           </h1>
           <p className="text-lg text-gray-500 dark:text-slate-400 max-w-xl mx-auto">
-            Browse the FAQ, check the docs, or send us a message — we typically respond within 24 hours.
+            Browse the FAQ, check the docs, or send us a message — we respond within 24–48 hours.
           </p>
         </div>
 
@@ -151,7 +151,7 @@ export function SupportPage() {
         <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl px-5 py-3">
           <Clock size={16} className="text-emerald-500 flex-shrink-0" />
           <p className="text-sm text-emerald-700 dark:text-emerald-400">
-            <strong>Typical response time: under 24 hours</strong> — Monday to Saturday. We aim to reply same-day on weekdays.
+            <strong>Response time: 24–48 hours</strong> — email us at <a href="mailto:support@codesense.online" className="underline font-semibold">support@codesense.online</a> and we'll get back to you as soon as possible.
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export function SupportPage() {
               <div>
                 <p className="font-semibold text-emerald-700 dark:text-emerald-400 text-sm">Message received!</p>
                 <p className="text-xs text-emerald-600/80 dark:text-emerald-500/80 mt-1">
-                  We'll reply to <strong>{email}</strong> within 24 hours. Check your spam folder if you don't hear from us.
+                  We'll reply to <strong>{email}</strong> within 24–48 hours. Check your spam folder if you don't hear from us.
                 </p>
               </div>
             </div>

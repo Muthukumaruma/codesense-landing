@@ -136,14 +136,14 @@ export function BetaModeBanner() {
 
         {/* Hero heading */}
         <h1 className="text-4xl sm:text-6xl font-extrabold text-gray-900 dark:text-white text-center leading-[1.1] max-w-3xl tracking-tight">
-          Ship code with{' '}
+          Find Bugs &amp; Improve Your Code{' '}
           <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            confidence
+            Instantly with AI
           </span>
         </h1>
 
         <p className="mt-5 text-lg sm:text-xl text-gray-500 dark:text-slate-400 text-center max-w-2xl leading-relaxed">
-          CodeSense AI automatically reviews every pull request for security vulnerabilities, performance issues, and code quality — so your team can ship faster without compromising standards.
+          AI Code Review in Seconds — Faster Debugging, Better Code. CodeSense AI automatically reviews every pull request for security vulnerabilities, performance issues, and code quality.
         </p>
 
         {/* Stats row */}

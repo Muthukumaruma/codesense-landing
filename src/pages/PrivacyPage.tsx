@@ -54,10 +54,20 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">5. Your Code &amp; AI Analysis</h2>
+
+          {/* Explicit statement */}
+          <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-xl px-5 py-4">
+            <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-1">Our explicit commitment on source code:</p>
+            <p className="text-sm text-emerald-700 dark:text-emerald-400 leading-relaxed">
+              <strong>We do not store or persist your source code.</strong> Code is processed temporarily for analysis and then discarded. Only the AI-generated review output (score, issues, and summary) is saved to your account history — never the original source code or file contents.
+            </p>
+          </div>
+
           <p>When you submit code for review:</p>
           <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li>Code diffs are sent to <strong>OpenAI's API</strong> for analysis. OpenAI processes this data under their <a href="https://openai.com/policies/privacy-policy" className="text-indigo-600 dark:text-indigo-400 underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. By default, OpenAI does not use API data to train models.</li>
+            <li>Code diffs are sent to <strong>OpenAI's API</strong> for analysis over an encrypted HTTPS connection. OpenAI processes this data under their <a href="https://openai.com/policies/privacy-policy" className="text-indigo-600 dark:text-indigo-400 underline" target="_blank" rel="noopener noreferrer">Privacy Policy</a>. By default, OpenAI does not use API data to train models.</li>
             <li>Code is also scanned locally using <strong>Semgrep</strong> (open-source static analysis) — no data leaves our servers for this step.</li>
+            <li>Raw source code is held <strong>in memory only</strong> for the duration of the request and is never written to disk or database.</li>
             <li>We do not sell, share, or use your source code for any purpose other than providing the review service.</li>
             <li>Completed review results are stored in your account history and can be deleted at any time.</li>
           </ul>

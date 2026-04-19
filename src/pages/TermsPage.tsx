@@ -2,7 +2,7 @@ export function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-16">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Terms of Service</h1>
-      <p className="text-sm text-gray-500 dark:text-slate-400 mb-10">Last updated: March 31, 2025</p>
+      <p className="text-sm text-gray-500 dark:text-slate-400 mb-10">Last updated: April 19, 2026</p>
 
       <div className="prose dark:prose-invert max-w-none space-y-8 text-gray-700 dark:text-slate-300">
 
@@ -26,15 +26,18 @@ export function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">4. Acceptable Use</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">4. Acceptable Use &amp; Abuse Protection</h2>
           <p>You agree not to:</p>
           <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li>Submit malicious code, malware, or exploits for review</li>
-            <li>Attempt to reverse-engineer or abuse the AI system</li>
-            <li>Use the Service to violate any applicable laws</li>
-            <li>Share your account or API access with unauthorized parties</li>
-            <li>Exceed usage limits through automated scripts or bots</li>
+            <li>Submit malicious code, malware, exploits, or harmful content for review</li>
+            <li>Attempt to reverse-engineer, scrape, or abuse the AI system or its outputs</li>
+            <li>Use the Service to violate any applicable laws or regulations</li>
+            <li>Share your account credentials or pipeline API keys with unauthorized parties</li>
+            <li>Exceed usage limits through automated scripts, bots, or bulk requests beyond your plan</li>
+            <li>Submit code or content that infringes intellectual property rights of others</li>
+            <li>Use the Service to generate, distribute, or train models on AI-generated outputs in violation of our API terms</li>
           </ul>
+          <p className="mt-3"><strong>Abuse protection:</strong> We monitor for unusual usage patterns — including high-volume automated submissions, credential sharing, and rate-limit circumvention. Accounts found abusing the Service may be rate-limited, suspended, or permanently terminated without refund. We reserve the right to block IP addresses or API keys that exhibit abusive behaviour.</p>
         </section>
 
         <section>
@@ -48,8 +51,29 @@ export function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">7. Usage Limits & Plans</h2>
-          <p>Free accounts are subject to usage limits. Exceeding limits may result in temporary restrictions. Paid plans are subject to separate billing terms. We reserve the right to modify plan limits with reasonable notice.</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">7. Usage Limits &amp; Plans</h2>
+          <p>Your plan defines the maximum number of code reviews, repo scans, PR reviews, and pipeline API calls you may perform per month. Limits are enforced automatically:</p>
+          <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li><strong>Free plan:</strong> Subject to a monthly review quota. Once the quota is reached, further reviews are blocked until the next billing cycle or an upgrade is made.</li>
+            <li><strong>Pro plan:</strong> Higher monthly limits apply. Unlimited usage is not guaranteed — fair-use limits exist to prevent abuse and ensure service quality for all users.</li>
+            <li><strong>Pipeline API keys:</strong> Each key has an individually configured rate limit (requests per minute). Exceeding this rate returns HTTP 429. Keys may be revoked if sustained abuse is detected.</li>
+            <li><strong>Token usage:</strong> AI analysis consumes tokens per review. Unusually large submissions (e.g., diffs exceeding 300 KB) are truncated to ensure fair resource allocation.</li>
+            <li>We reserve the right to modify plan limits with 14 days' notice. Existing subscribers will not have limits reduced mid-billing cycle.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">7a. API Usage Restrictions</h2>
+          <p>Pipeline API keys grant programmatic access to the CodeSense AI analysis engine. By using pipeline API keys you agree to:</p>
+          <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li>Use keys only within your own CI/CD pipelines for your own repositories or those you have authorisation to analyse.</li>
+            <li>Not distribute, resell, or sub-license API access to third parties.</li>
+            <li>Not use the API to build a competing code review product or service without our written consent.</li>
+            <li>Store API keys securely as CI/CD secrets — never commit them to source control.</li>
+            <li>Comply with the per-key rate limits assigned at key creation. Circumventing rate limits (e.g., by rotating multiple keys) is prohibited.</li>
+            <li>Accept that API responses are AI-generated and provided without warranty. Do not use them as the sole basis for security or production decisions.</li>
+          </ul>
+          <p className="mt-3">Violation of API usage restrictions may result in immediate key revocation, account suspension, or legal action where applicable.</p>
         </section>
 
         <section>

@@ -1231,6 +1231,11 @@ const QUICK_START = [
 export function DocsPage() {
   const { section = 'getting-started' } = useParams<{ section: string }>()
 
+  // Scroll to top whenever section changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+  }, [section])
+
   if (!SECTIONS[section]) {
     return <Navigate to="/docs/getting-started" replace />
   }

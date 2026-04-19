@@ -60,7 +60,7 @@ export function SecurityPolicyPage() {
       </div>
 
       {/* Guarantees strip */}
-      <div className="grid sm:grid-cols-3 gap-3 mb-10">
+      <div className="grid sm:grid-cols-3 gap-3 mb-6">
         {[
           { icon: <Eye size={16} />, title: 'No code storage', desc: 'We never permanently store your source code' },
           { icon: <Lock size={16} />, title: 'No code training', desc: 'Your code is never used to train any AI model' },
@@ -70,6 +70,21 @@ export function SecurityPolicyPage() {
             <span className="text-brand-500">{g.icon}</span>
             <p className="text-sm font-bold text-slate-900 dark:text-white">{g.title}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">{g.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Explicit security promises */}
+      <div className="grid sm:grid-cols-3 gap-3 mb-10">
+        {[
+          { icon: <Eye size={16} />, color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-800', title: 'Read-only repository access', desc: 'We request only the minimum OAuth scopes needed — read access to repos and PR diffs. We never write, modify, or delete your code.' },
+          { icon: <ShieldCheck size={16} />, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800', title: 'Secure OAuth integrations', desc: 'All platform connections (GitHub, GitLab, Azure DevOps, Bitbucket) use official OAuth 2.0 flows. Tokens are stored encrypted at rest and never logged or exported.' },
+          { icon: <Key size={16} />, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800', title: 'API keys are encrypted', desc: 'Pipeline API keys are stored hashed. OAuth tokens are encrypted at rest using field-level encryption. Raw keys are never visible after creation.' },
+        ].map((g) => (
+          <div key={g.title} className={`flex flex-col gap-2 border rounded-xl px-4 py-4 ${g.bg}`}>
+            <span className={g.color}>{g.icon}</span>
+            <p className="text-sm font-bold text-slate-900 dark:text-white">{g.title}</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{g.desc}</p>
           </div>
         ))}
       </div>
@@ -108,11 +123,12 @@ export function SecurityPolicyPage() {
         <Section icon={<Key size={16} />} title="OAuth Tokens & Credential Security">
           <p>To access your repositories on connected platforms (GitHub, GitLab, Azure DevOps, Bitbucket), we store OAuth access tokens or personal access tokens (PATs) you provide. Here is how we protect them:</p>
           <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li>Tokens are stored <strong>encrypted at rest</strong> in our database using field-level encryption.</li>
+            <li><strong>Read-only access to repositories:</strong> We request only the minimum OAuth scopes required — read access to repo contents and PR diffs. We never request write, push, delete, or admin permissions.</li>
+            <li><strong>Secure OAuth integrations:</strong> All platform connections use the official OAuth 2.0 authorization code flow. You authenticate directly with the provider — we never see your password.</li>
+            <li><strong>API keys are encrypted:</strong> Pipeline API keys are stored hashed (bcrypt). OAuth access tokens are encrypted at rest using field-level encryption. Raw values are never recoverable after storage.</li>
             <li>Tokens are only used to perform actions you explicitly trigger (list repos, fetch PR diffs, run scans).</li>
             <li>Tokens are <strong>never logged, exported, or shared</strong> with any third party.</li>
-            <li>You can disconnect any platform at any time from the PR Reviews page — this immediately deletes the stored token.</li>
-            <li>We request only the <strong>minimum OAuth scopes</strong> required: read access to repos and PR threads.</li>
+            <li>You can disconnect any platform at any time from Settings — this immediately and permanently deletes the stored token.</li>
           </ul>
           <Guarantee>Disconnecting a platform from Settings immediately and permanently deletes the stored token from our database.</Guarantee>
         </Section>
