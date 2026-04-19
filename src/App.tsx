@@ -4,7 +4,7 @@ import { Header } from './components/layout/Header'
 import { BetaModeBanner } from './components/BetaModeBanner'
 
 // ─── Set to false to hide the beta banner and show the full site ──────────────
-const BETA_MODE = false
+const BETA_MODE = true
 const APP_URL = import.meta.env.VITE_APP_URL || 'https://app.codesense.online'
 
 import { HomePage } from './pages/HomePage'
