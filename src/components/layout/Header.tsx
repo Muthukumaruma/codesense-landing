@@ -12,8 +12,8 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <img src="/codesense-dark-logo.png" alt="CodeSense AI" className="h-10 dark:hidden" width="770" height="244" />
-            <img src="/codesense-light-logo.png" alt="CodeSense AI" className="h-10 hidden dark:block" width="778" height="244" />
+            <img src="/codesense-dark-logo.png" alt="CodeSense AI" className="h-10 w-auto dark:hidden" width="770" height="244" />
+            <img src="/codesense-light-logo.png" alt="CodeSense AI" className="h-10 w-auto hidden dark:block" width="778" height="244" />
           </Link>
 
           {/* Nav */}
