@@ -50,7 +50,7 @@ const H_CODE_SNIPPETS = [
   { text: 'npx @codesenseai/cli check --threshold 70',    color: 'text-brand-600 dark:text-brand-400' },
   { text: '✓ No critical issues found — Score: 97',       color: 'text-emerald-600 dark:text-emerald-400' },
   { text: 'const { critical, high, medium } = findings',  color: 'text-slate-500 dark:text-slate-500' },
-  { text: '// TODO: sanitize user input before query',    color: 'text-amber-600 dark:text-amber-400' },
+  { text: '// WARN: sanitize user input before query',    color: 'text-amber-600 dark:text-amber-400' },
   { text: 'await pr.addComment(reviewSummary)',            color: 'text-brand-600 dark:text-brand-400' },
 ]
 
@@ -249,7 +249,7 @@ const slides = [
     code: [
       { text: "+ const key = 'sk_live_abc123secret'", highlight: 'red' },
       { text: "+ await stripe.charge({ amount })", plain: true },
-      { text: "+ // TODO: add error handling", highlight: 'amber' },
+      { text: "+ // WARN: add error handling", highlight: 'amber' },
       { text: "  return res.json({ ok: true })", plain: true },
     ],
     findings: [
