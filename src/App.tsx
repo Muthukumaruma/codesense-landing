@@ -73,6 +73,8 @@ export default function App() {
           <div className="fluid-container flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-slate-500">
             <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-3">
               <span>© {new Date().getFullYear()} CodeSense AI. All rights reserved.</span>
+              <span className="hidden sm:inline text-gray-300 dark:text-white/10">·</span>
+              <span>Built by <a href="https://xyenthra.com" target="_blank" rel="noopener noreferrer" className="text-brand-600 dark:text-brand-400 hover:underline font-medium">Xyenthra Technologies</a></span>
             </div>
             <div className="flex items-center gap-6">
               <a href={`${APP_URL}/pricing`} className="hover:text-gray-800 dark:hover:text-slate-300 transition-colors">Pricing</a>
